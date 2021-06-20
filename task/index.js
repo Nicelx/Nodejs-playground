@@ -10,22 +10,17 @@
 // new task
 
 const express = require('express');
+const bodyParser = require("body-parser");
+const path = require('path');
+
+const router = require('./routes');
 
 const app = express();
 
 app.listen(3000);
 
-app.use((req,res,next) => {
-	console.log('first middleware');
-	next();
-})
-app.use((req,res,next) => {
-	console.log('second middleware');
-	next();
-})
-app.use('/users', (req,res) => {
-	res.send('<h1>users</h1>')
-})
-app.use('/', (req,res) => {
-	res.send('<h1>home</h1>')
+app.use(express.static(path.join(__dirname)))
+app.use(router);
+app.use((req,res) => {
+	res.send('<h1>page not found</h1>')
 })
