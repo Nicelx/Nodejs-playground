@@ -9,7 +9,7 @@ const products = [];
 
 router.get("/add-product", (req, res, next) => {
 	// res.sendFile(path.join(rootDir, "views", "add-product.html"));
-	res.render('shop');
+	res.render('add-product', {pageTitle : 'Add Product'});
 });
 // router.use('/product', (req, res) => {  // we can specify methods in routes
 // app.use('/product', (req, res) => {  // we can specify methods in routes
