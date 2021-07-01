@@ -3,13 +3,20 @@ const path = require('path');
 
 const router = express.Router();
 
+const users = [];
+
 router.get('/', (req,res,next) => {
-	const cPath = path.join(__dirname, 'index.html');
-	res.sendFile(cPath)
+	res.render('index', {title: 'home'});
+	console.log('yay')
 })
 router.get('/users', (req,res,next) => {
-	const cPath = path.join(__dirname, 'users.html');
-	res.sendFile(cPath)
+	res.render('users', {title: 'users'})
+})
+
+router.post('/add-user' , (req,res) => {
+	users.push('123456');
+	console.log('222')
+	res.redirect("/");
 })
 
 
