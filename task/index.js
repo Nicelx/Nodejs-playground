@@ -21,6 +21,7 @@ app.set("view engine", "ejs");
 app.set("views", "task/views");
 
 // app.use(express.static(path.join(__dirname)));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 
 app.use(router);

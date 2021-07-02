@@ -10,13 +10,14 @@ router.get('/', (req,res,next) => {
 	console.log('yay')
 })
 router.get('/users', (req,res,next) => {
-	res.render('users', {title: 'users'})
+	res.render('users', {title: 'users', data : users})
 })
 
 router.post('/add-user' , (req,res) => {
-	users.push('123456');
-	console.log('222')
-	res.redirect("/");
+
+	users.push(req.body.name);
+	console.log(users)
+	res.redirect("/users");
 })
 
 

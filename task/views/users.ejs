@@ -7,6 +7,12 @@
 	<title>Document</title>
 </head>
 <body>
+	<a href="/">home</a>
 	<h1>users</h1>
+	<ul>
+		<% for (let user of data) {%>
+			<p><%= user %></p>
+		<% } %>
+	</ul>
 </body>
 </html>
