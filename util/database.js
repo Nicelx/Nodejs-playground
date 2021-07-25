@@ -1,17 +1,20 @@
-const fs = require("fs");
-const path = require("path");
+// const mysql = require("mysql2");
 
-const p = path.join(path.dirname(require.main.filename), "..", "data", "password.json");
-let password;
+// 	const pool = mysql.createPool({
+// 		host: "localhost",
+// 		user: "root",
+// 		database: "node-complete",
+// 		password: '12345'
+// 	});
 
-const mysql = require("mysql2");
+// module.exports = pool.promise();
 
-	const pool = mysql.createPool({
-		host: "localhost",
-		user: "root",
-		database: "node-complete",
-		// password: password,
-		password: '12345'
-	});
 
-module.exports = pool.promise();
+const Sequelize = require('sequelize');
+
+const sequelize = new Sequelize('node-complete', 'root', '12345', {
+	dialect: 'mysql',
+	host: 'localhost'
+});
+
+module.exports = sequelize;
