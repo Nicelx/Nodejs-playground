@@ -14,8 +14,10 @@ exports.postAddProduct = (req, res) => {
 		title: title,
 		price: price,
 		imageUrl: imageUrl,
-		description: description
-	}).then(result => console.log('New product had been created')).catch(err => console.err(err));
+		description: description,
+	})
+		.then((result) => console.log("New product has been created"))
+		.catch((err) => console.err(err));
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -62,11 +64,20 @@ exports.postDeleteProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-	Product.fetchAll((products) => {
-		res.render("admin/products", {
-			prods: products,
-			pageTitle: "Admin Products",
-			path: "/admin/products",
-		});
-	});
+	Product.findAll()
+		.then((products) => {
+			res.render("admin/products", {
+				prods: products,
+				pageTitle: "Admin Products",
+				path: "/admin/products",
+			});
+		})
+		.catch((e) => console.log(e));
+	// Product.fetchAll((products) => {
+	// 	res.render("admin/products", {
+	// 		prods: products,
+	// 		pageTitle: "Admin Products",
+	// 		path: "/admin/products",
+	// 	});
+	// });
 };
