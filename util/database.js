@@ -1,20 +1,15 @@
-// const mysql = require("mysql2");
+const mongodb = require("mongodb");
+const MongoClient = mongodb.MongoClient;
 
-// 	const pool = mysql.createPool({
-// 		host: "localhost",
-// 		user: "root",
-// 		database: "node-complete",
-// 		password: '12345'
-// 	});
+const mongoConnect = (callback) => {
+	MongoClient.connect(
+		"mongodb+srv://Nicel:12345@node-complete.nsiof.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+	)
+		.then((client) => {
+			console.log("Connected!");
+			callback(client);
+		})
+		.catch((e) => console.log(e));
+};
 
-// module.exports = pool.promise();
-
-
-const Sequelize = require('sequelize');
-
-const sequelize = new Sequelize('node-complete', 'root', '12345', {
-	dialect: 'mysql',
-	host: 'localhost'
-});
-
-module.exports = sequelize;
+module.exports = mongoConnect;
