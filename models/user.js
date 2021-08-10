@@ -20,6 +20,7 @@ class User {
 		return db.collection("users").findOne({ _id: new ObjectId(userId) }).then(user => {
 			return user
 		});
+		// return db.collection("users").findOne({ _id: new ObjectId(userId) })
 	}
 }
 
