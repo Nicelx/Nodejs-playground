@@ -35,6 +35,7 @@ class Product {
 	}
 	static findById(prodId) {
 		const db = getDb();
+		console.log(prodId);
 
 		return db
 			.collection("products")
