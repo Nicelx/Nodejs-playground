@@ -22,11 +22,11 @@ const fn = (el) => {
 	return extractArraysFromProperty(places);
 }
 
-const extractArraysFromProperty = (placesObj) => {
+const extractArraysFromProperty = (places) => {
 	const result = [];
-	for (item in placesObj) {
-		if (placesObj.hasOwnProperty(item)) {
-			const arr = placesObj[item];
+	for (item in places) {
+		if (places.hasOwnProperty(item)) {
+			const arr = places[item];
 			const place = arr[0]
 			const sortedExplorer = arr.splice(1,).sort();
 			
