@@ -33,6 +33,7 @@
     "mongodb": "^4.1.0",
     "mongoose": "^5.13.7",
     "mysql2": "^2.2.5",
+    "nodemailer": "^6.6.3",
     "pug": "^3.0.2",
     "sequelize": "^6.6.5"
   }
