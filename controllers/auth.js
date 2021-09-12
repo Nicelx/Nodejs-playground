@@ -1,6 +1,17 @@
 const bcrypt = require("bcryptjs");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 // const sendgridTransport = require('nodemailer-sendgrid-transport');
+let testEmailAccount = await nodemailer.createTestAccount();
+
+let transporter = nodemailer.createTransport({
+	host: "smtp.ethereal.email",
+	port: 587,
+	secure: false,
+	auth: {
+		user: testEmailAccount.user,
+		pass: testEmailAccount.pass,
+	},
+});
 
 const User = require("../models/user");
 
@@ -11,7 +22,7 @@ const User = require("../models/user");
 // }));
 
 exports.getLogin = (req, res, next) => {
-	let message = req.flash('error');
+	let message = req.flash("error");
 	if (message.length > 0) {
 		message = message[0];
 	} else {
@@ -25,7 +36,7 @@ exports.getLogin = (req, res, next) => {
 };
 
 exports.getSignup = (req, res, next) => {
-	let message = req.flash('error');
+	let message = req.flash("error");
 	if (message.length > 0) {
 		message = message[0];
 	} else {
@@ -44,7 +55,7 @@ exports.postLogin = (req, res, next) => {
 	User.findOne({ email })
 		.then((user) => {
 			if (!user) {
-				req.flash('error', 'Invalid email or password')
+				req.flash("error", "Invalid email or password");
 				return res.redirect("/login");
 			}
 			bcrypt
@@ -58,7 +69,7 @@ exports.postLogin = (req, res, next) => {
 							res.redirect("/");
 						});
 					}
-					req.flash('error', 'Invalid email or password')
+					req.flash("error", "Invalid email or password");
 					res.redirect("/login");
 				})
 				.catch((err) => {
@@ -76,7 +87,7 @@ exports.postSignup = (req, res, next) => {
 	User.findOne({ email: email })
 		.then((userDoc) => {
 			if (userDoc) {
-				req.flash('error', 'email exists already');
+				req.flash("error", "email exists already");
 				return res.redirect("/signup");
 			}
 			return bcrypt
@@ -91,16 +102,16 @@ exports.postSignup = (req, res, next) => {
 				})
 				.then(() => {
 					res.redirect("/login");
-					return transporter.sendMail({
-						to : email,
-						from : 'shop@node-complete.com',
-						subject: 'Sugnup Succeded!',
-						html : '<h1>you signed up</h1>'
-					});
-				})
-				.catch(err => {
-					console.log(err);
-				})
+					// return transporter.sendMail({
+					// 	to : email,
+					// 	from : 'shop@node-complete.com',
+					// 	subject: 'Sugnup Succeded!',
+					// 	html : '<h1>you signed up</h1>'
+					// });
+				});
+			// .catch(err => {
+			// 	console.log(err);
+			// })
 		})
 
 		.catch((err) => console.log(err));
