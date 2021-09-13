@@ -1,15 +1,12 @@
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 // const sendgridTransport = require('nodemailer-sendgrid-transport');
-let testEmailAccount = await nodemailer.createTestAccount();
 
 let transporter = nodemailer.createTransport({
-	host: "smtp.ethereal.email",
-	port: 587,
-	secure: false,
+	host: "smtp.gmail.com",
 	auth: {
-		user: testEmailAccount.user,
-		pass: testEmailAccount.pass,
+		user: "nicelmailfordev@gmail.com",
+		pass: "testsNeverEnds",
 	},
 });
 
@@ -32,6 +29,12 @@ exports.getLogin = (req, res, next) => {
 		path: "/login",
 		pageTitle: "Login",
 		errorMessage: message,
+	});
+	transporter.sendMail({
+		to: "nicezero321@gmail.com",
+		from: "nicelmailfordev@gmail.com",
+		subject: "Test email",
+		html: "<h1>you signed up</h1>",
 	});
 };
 
