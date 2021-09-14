@@ -2,11 +2,14 @@ const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 // const sendgridTransport = require('nodemailer-sendgrid-transport');
 
-let transporter = nodemailer.createTransport({
-	host: "smtp.gmail.com",
+const transporter = nodemailer.createTransport({
+	service: "gmail",
 	auth: {
 		user: "nicelmailfordev@gmail.com",
 		pass: "testsNeverEnds",
+	},
+	tls: {
+		rejectUnauthorized: false,
 	},
 });
 
@@ -29,12 +32,6 @@ exports.getLogin = (req, res, next) => {
 		path: "/login",
 		pageTitle: "Login",
 		errorMessage: message,
-	});
-	transporter.sendMail({
-		to: "nicezero321@gmail.com",
-		from: "nicelmailfordev@gmail.com",
-		subject: "Test email",
-		html: "<h1>you signed up</h1>",
 	});
 };
 
@@ -105,18 +102,23 @@ exports.postSignup = (req, res, next) => {
 				})
 				.then(() => {
 					res.redirect("/login");
-					// return transporter.sendMail({
-					// 	to : email,
-					// 	from : 'shop@node-complete.com',
-					// 	subject: 'Sugnup Succeded!',
-					// 	html : '<h1>you signed up</h1>'
-					// });
+					return transporter.sendMail(
+						{
+							from: "Me",
+							to: "nicezero321@gmail.com",
+							subject: "Test email",
+							html: "<h1>you signed up</h1>",
+						}
+						// (err, info) => {
+						// 	if (err) console.log(err);
+						// 	if (!info) console.log(info);
+						// }
+					);
+				})
+				.catch((err) => {
+					console.log(err);
 				});
-			// .catch(err => {
-			// 	console.log(err);
-			// })
 		})
-
 		.catch((err) => console.log(err));
 };
 
