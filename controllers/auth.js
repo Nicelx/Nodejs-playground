@@ -149,17 +149,17 @@ exports.postReset = (req, res, next) => {
 		const token = buffer.toString("hex");
 
 		User.findOne({ email: req.body.email })
-			.then(user => {
+			.then((user) => {
 				if (!user) {
-					req.flash('error', 'No account with that email found')
-					return res.redirect('/reset');
+					req.flash("error", "No account with that email found");
+					return res.redirect("/reset");
 				}
 				user.resetToken = token;
-				user.resetExpirationToken = Date.now() + 3600000;
+				user.resetTokenExpiration = Date.now() + 3600000;
 				return user.save();
 			})
-			.then(result => {
-				res.redirect('/')
+			.then((result) => {
+				res.redirect("/");
 				transporter.sendMail({
 					from: "Me",
 					to: req.body.email,
@@ -174,4 +174,53 @@ exports.postReset = (req, res, next) => {
 				console.log(e);
 			});
 	});
+};
+
+exports.getNewPassword = (req, res, next) => {
+	const token = req.params.token;
+	User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
+		.then((user) => {
+			let message = req.flash("error");
+			if (message.length > 0) {
+				message = message[0];
+			} else {
+				message = null;
+			}
+
+			res.render("auth/new-password", {
+				path: "/new-password",
+				pageTitle: "New Password",
+				errorMessage: message,
+				userId: user._id.toString(),
+				passwordToken: token,
+			});
+		})
+		.catch((e) => console.log(e));
+};
+
+exports.postNewPassword = (req, res, next) => {
+	const newPassword = req.body.password;
+	const userId = req.body.userId;
+	const passwordToken = req.body.passwordToken;
+	let resetUser;
+
+	User.findOne({
+		resetToken: passwordToken,
+		resetTokenExpiration: { $gt: Date.now() },
+		_id: userId,
+	})
+		.then((user) => {
+			resetUser = user;
+			return bcrypt.hash(newPassword, 12);
+		})
+		.then((hashedPassword) => {
+			resetUser.password = hashedPassword;
+			resetUser.resetToken = undefined;
+			resetUser.resetTokenExpiration = undefined;
+			return resetUser.save();
+		})
+		.then(result => {
+			res.redirect('/login')
+		})
+		.catch((err) => console.log(err));
 };
