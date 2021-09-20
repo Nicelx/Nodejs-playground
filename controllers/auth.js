@@ -3,7 +3,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 // const sendgridTransport = require('nodemailer-sendgrid-transport');
-const {validationResult} = require('express-validator/check');
+const { validationResult } = require("express-validator/check");
 
 const transporter = nodemailer.createTransport({
 	service: "gmail",
@@ -86,47 +86,37 @@ exports.postLogin = (req, res, next) => {
 exports.postSignup = (req, res, next) => {
 	const email = req.body.email;
 	const password = req.body.password;
-	const confirmPassword = req.body.confirmPassword;
 	const errors = validationResult(req);
 
 	if (!errors.isEmpty()) {
-		return res.status(422).render('auth/signup', {
-			path: '/signup',
-			pageTitle : 'Signup',
-			errorMessage : errors.array()[0].msg
+		return res.status(422).render("auth/signup", {
+			path: "/signup",
+			pageTitle: "Signup",
+			errorMessage: errors.array()[0].msg,
 		});
-	} 
-
-	User.findOne({ email: email })
-		.then((userDoc) => {
-			if (userDoc) {
-				req.flash("error", "email exists already");
-				return res.redirect("/signup");
-			}
-			return bcrypt
-				.hash(password, 12)
-				.then((hashedPassword) => {
-					const user = new User({
-						email,
-						password: hashedPassword,
-						cart: { items: [] },
-					});
-					return user.save();
-				})
-				.then(() => {
-					res.redirect("/login");
-					return transporter.sendMail({
-						from: "Me",
-						to: "nicezero321@gmail.com",
-						subject: "Test email",
-						html: "<h1>you signed up</h1>",
-					});
-				})
-				.catch((err) => {
-					console.log(err);
-				});
+	}
+	bcrypt
+		.hash(password, 12)
+		.then((hashedPassword) => {
+			const user = new User({
+				email,
+				password: hashedPassword,
+				cart: { items: [] },
+			});
+			return user.save();
 		})
-		.catch((err) => console.log(err));
+		.then(() => {
+			res.redirect("/login");
+			return transporter.sendMail({
+				from: "Me",
+				to: "nicezero321@gmail.com",
+				subject: "Test email",
+				html: "<h1>you signed up</h1>",
+			});
+		})
+		.catch((err) => {
+			console.log(err);
+		});
 };
 
 exports.postLogout = (req, res, next) => {
@@ -230,8 +220,8 @@ exports.postNewPassword = (req, res, next) => {
 			resetUser.resetTokenExpiration = undefined;
 			return resetUser.save();
 		})
-		.then(result => {
-			res.redirect('/login')
+		.then((result) => {
+			res.redirect("/login");
 		})
 		.catch((err) => console.log(err));
 };
