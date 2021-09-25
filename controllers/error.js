@@ -1,5 +1,17 @@
-const path = require('path')
+const path = require("path");
 
 exports.get404 = (req, res, next) => {
-	res.status(404).render("404", { pageTitle: "Page Not Found", path: 'any',isAuthenticated: req.session.isLoggedIn, });
-}
+	res.status(404).render("404", {
+		pageTitle: "Page Not Found",
+		path: "/404",
+		isAuthenticated: req.session.isLoggedIn,
+	});
+};
+
+exports.get500 = (req, res, next) => {
+	res.status(500).render("500", {
+		pageTitle: "error",
+		path: "/500",
+		isAuthenticated: req.session.isLoggedIn,
+	});
+};
