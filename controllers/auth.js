@@ -2,7 +2,6 @@ const crypto = require("crypto");
 
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
-// const sendgridTransport = require('nodemailer-sendgrid-transport');
 const { validationResult } = require("express-validator/check");
 
 const transporter = nodemailer.createTransport({
@@ -17,12 +16,6 @@ const transporter = nodemailer.createTransport({
 });
 
 const User = require("../models/user");
-
-// const transporter = nodemailer.createTransport(sendgridTransport({
-// 	auth : {
-// 		api_user : 'key',
-// 	}
-// }));
 
 exports.getLogin = (req, res, next) => {
 	let message = req.flash("error");
@@ -88,7 +81,7 @@ exports.postLogin = (req, res, next) => {
 				return res.status(422).render("auth/login", {
 					path: "/login",
 					pageTitle: "Login",
-					errorMessage:  "Wrong email or password",
+					errorMessage: "Wrong email or password",
 					oldInput: {
 						email,
 						password,
@@ -110,7 +103,7 @@ exports.postLogin = (req, res, next) => {
 					return res.status(422).render("auth/login", {
 						path: "/login",
 						pageTitle: "Login",
-						errorMessage:  "Wrong email or password",
+						errorMessage: "Wrong email or password",
 						oldInput: {
 							email,
 							password,
@@ -123,7 +116,11 @@ exports.postLogin = (req, res, next) => {
 					res.redirect("/");
 				});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			const error = new Error(err);
+			error.httpStatusCode = 500;
+			return next(error);
+		});
 };
 
 exports.postSignup = (req, res, next) => {
@@ -165,7 +162,9 @@ exports.postSignup = (req, res, next) => {
 			});
 		})
 		.catch((err) => {
-			console.log(err);
+			const error = new Error(err);
+			error.httpStatusCode = 500;
+			return next(error);
 		});
 };
 
@@ -221,8 +220,10 @@ exports.postReset = (req, res, next) => {
 					`,
 				});
 			})
-			.catch((e) => {
-				console.log(e);
+			.catch((err) => {
+				const error = new Error(err);
+				error.httpStatusCode = 500;
+				return next(error);
 			});
 	});
 };
@@ -246,7 +247,11 @@ exports.getNewPassword = (req, res, next) => {
 				passwordToken: token,
 			});
 		})
-		.catch((e) => console.log(e));
+		.catch((err) => {
+			const error = new Error(err);
+			error.httpStatusCode = 500;
+			return next(error);
+		});
 };
 
 exports.postNewPassword = (req, res, next) => {
@@ -273,5 +278,9 @@ exports.postNewPassword = (req, res, next) => {
 		.then((result) => {
 			res.redirect("/login");
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			const error = new Error(err);
+			error.httpStatusCode = 500;
+			return next(error);
+		});
 };
