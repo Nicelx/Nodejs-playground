@@ -36,6 +36,7 @@ exports.postAddProduct = (req, res, next) => {
 			editing: false,
 			hasError: true,
 			product: { title, imageUrl, price, description },
+			// product: { title, price, description },
 			errorMessage: errors.array()[0].msg,
 			validationErrors: errors.array(),
 		});
@@ -101,7 +102,6 @@ exports.postEditProduct = (req, res, next) => {
 	const errors = validationResult(req);
 
 	if (!errors.isEmpty()) {
-		console.log(errors.array());
 		return res.status(422).render("admin/edit-product", {
 			pageTitle: "Edit Product",
 			path: "/admin/edit-product",
