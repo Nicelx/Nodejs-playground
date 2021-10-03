@@ -64,7 +64,7 @@ exports.getIndex = (req, res, next) => {
 	let totalItems;
 
 	Product.find()
-		.count()
+		.countDocuments()
 		.then((numProducts) => {
 			totalItems = numProducts;
 			return Product.find()
@@ -72,11 +72,16 @@ exports.getIndex = (req, res, next) => {
 				.limit(ITEMS_PER_PAGE);
 		})
 		.then((products) => {
+			console.log(products)
+			console.log(page)
+			console.log(totalItems)
+			
+
 			res.render("shop/index", {
 				prods: products,
 				pageTitle: "Shop",
 				path: "/",
-				totalProducts: totalItems,
+				currentPage : page,
 				hasNextPage: ITEMS_PER_PAGE * page < totalItems,
 				hasPreviousPage: page > 1,
 				nextPage : page + 1,
@@ -86,6 +91,7 @@ exports.getIndex = (req, res, next) => {
 		})
 		.catch((err) => {
 			const error = new Error(err);
+			console.err('getIndex')
 			error.httpStatusCode = 500;
 			return next(error);
 		});
