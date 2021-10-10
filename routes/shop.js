@@ -22,12 +22,16 @@ router.get("/checkout/success", shopController.getCheckoutSuccess);
 
 router.get("/checkout/cancel", shopController.getCheckout);
 
-// router.post('/create-order',isAuth, shopController.postOrder)
-
 router.get("/orders",isAuth, shopController.getOrders);
 
 router.get("/orders/:orderId",isAuth, shopController.getInvoice);
 
+router.get('/rest/:number', (req,res,next) => {
+	const number = req.params.number;
+	res.send({
+		number
+	})
+})
 
 
 module.exports = router;

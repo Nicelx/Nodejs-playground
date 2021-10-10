@@ -298,19 +298,6 @@ exports.getInvoice = (req, res, next) => {
 			pdfDoc.fontSize(20).text("Total price = $" + totalPrice);
 
 			pdfDoc.end();
-
-			// fs.readFile(invoicePath, (err, data) => {
-			// 	if (err) {
-			// 		return next(err);
-			// 	}
-			// 	res.setHeader("Content-Type", "application/pdf");
-			// 	res.setHeader("Conten-Disposition", 'inline; filename = "' + invoiceName + '"');
-			// 	res.send(data);
-			// });
-
-			// const file = fs.createReadStream(invoicePath);
-
-			// file.pipe(res);
 		})
 		.catch((e) => next(e));
 };

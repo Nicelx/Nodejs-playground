@@ -25,9 +25,7 @@
 							</div>
 							<div class="card__actions">
 								<a href="/products/<%= product._id %>" class = "btn">Details</a>
-								<!-- <form action="/add-to-cart" method = "POST">
-									<button class="btn">Add to Card</button>
-								</form> -->
+							
 								<% if (isAuthenticated) {%>
 									<%- include('../includes/add-to-cart.ejs', {product: product}) %>
 								<%}%>
@@ -46,5 +44,9 @@
 			<% }  else { %>
 				<h1>No Products Found!</h1>
 			<% } %>
+				<div>
+					<a href="/rest/1">1</a>
+					<a href="/rest/2">2</a>
+				</div>
 		</main>
 <%- include('../includes/end.ejs') %>
