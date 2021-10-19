@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 const { validationResult } = require("express-validator/check");
 
 const Post = require("../models/post");
@@ -113,7 +113,7 @@ exports.updatePost = (req, res, next) => {
 				throw error;
 			}
 			if (imageUrl !== post.imageUrl) {
-				clearImage(post.imageUrl)
+				clearImage(post.imageUrl);
 			}
 			post.title = title;
 			post.imageUrl = imageUrl;
@@ -121,7 +121,7 @@ exports.updatePost = (req, res, next) => {
 			return post.save();
 		})
 		.then((result) => {
-			res.status(200).json({ message: "post updated" , post : result});
+			res.status(200).json({ message: "post updated", post: result });
 		})
 		.catch((err) => {
 			if (!err.statusCode) {
@@ -131,10 +131,9 @@ exports.updatePost = (req, res, next) => {
 		});
 };
 
-
-const clearImage = filePath => {
-	const fP = path.join(__dirname, '..', filePath) 
-	fs.unlink(fP, err => {
-		console.log(err)
-	})
-}
+const clearImage = (filePath) => {
+	const fP = path.join(__dirname, "..", filePath);
+	fs.unlink(fP, (err) => {
+		console.log(err);
+	});
+};
