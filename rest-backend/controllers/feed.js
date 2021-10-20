@@ -97,7 +97,7 @@ exports.updatePost = (req, res, next) => {
 	let imageUrl = req.body.image;
 
 	if (req.file) {
-		imageUrl = req.path.replace("\\", "/");
+		imageUrl = req.file.path.replace("\\", "/");
 	}
 
 	if (!imageUrl) {
