@@ -41,7 +41,8 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 app.use((req, res, next) => {
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	res.setHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, PATCH, DELETE");
-	res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+	// res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+	res.setHeader("Access-Control-Allow-Headers", "*");
 	next();
 });
 
@@ -62,6 +63,12 @@ app.use((err, req, res, next) => {
 mongoose
 	.connect(MONGODB_URI)
 	.then((result) => {
-		app.listen(8080);
+		const server = app.listen(8080);
+		const io = require('socket.io')(server , {
+			origins: ["https://localhost:3000"]
+		  });
+		io.on('connection', socket => {
+			console.log('client connected!!');
+		})
 	})
 	.catch((err) => console.log(err));
