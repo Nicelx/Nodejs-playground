@@ -64,8 +64,11 @@ mongoose
 	.connect(MONGODB_URI)
 	.then((result) => {
 		const server = app.listen(8080);
-		const io = require('socket.io')(server , {
-			origins: ["https://localhost:3000"]
+		const io = require('./socket').init(server , {
+			cors: {
+			  origin: "http://localhost:3000",
+			  credentials: true
+			}
 		  });
 		io.on('connection', socket => {
 			console.log('client connected!!');
