@@ -4,8 +4,6 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const multer = require("multer");
 
-const feedRoutes = require("./routes/feed");
-const authRoutes = require('./routes/auth');
 
 const app = express();
 
@@ -46,8 +44,6 @@ app.use((req, res, next) => {
 	next();
 });
 
-app.use("/feed", feedRoutes);
-app.use("/auth", authRoutes);
 
 app.use((err, req, res, next) => {
 	console.log(err);
@@ -63,15 +59,6 @@ app.use((err, req, res, next) => {
 mongoose
 	.connect(MONGODB_URI)
 	.then((result) => {
-		const server = app.listen(8080);
-		const io = require('./socket').init(server , {
-			cors: {
-			  origin: "http://localhost:3000",
-			  credentials: true
-			}
-		  });
-		io.on('connection', socket => {
-			console.log('client connected!!');
-		})
+		app.listen(8080);
 	})
 	.catch((err) => console.log(err));
