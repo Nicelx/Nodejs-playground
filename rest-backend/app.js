@@ -66,7 +66,9 @@ app.put('/post-image', (req, res, next) => {
 	if (req.body.oldPath) {
 		clearImage(req.body.oldPath);
 	}
-	return res.status(201).json({message : 'file stored!', filePath: req.file.path})
+
+	const correctPath = req.file.path.replace(/\\/g, '/');
+	return res.status(201).json({message : 'file stored!', filePath: correctPath})
 });
 
 
