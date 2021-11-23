@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -7,7 +7,7 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
 const flash = require("connect-flash");
-const multer = require('multer');
+const multer = require("multer");
 
 const User = require("./models/user");
 
@@ -16,7 +16,9 @@ const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
 
 const errorController = require("./controllers/error");
-const MONGODB_URI = "mongodb+srv://Nicel:12345@node-complete.nsiof.mongodb.net/shop";
+const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@node-complete.nsiof.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`;
+// Nicel       12345   shop
+console.log(MONGODB_URI);
 
 const app = express();
 const store = new MongoDBStore({
@@ -27,32 +29,34 @@ const csrfProtection = csrf();
 
 const fileStorage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, 'images');
+		cb(null, "images");
 	},
 	filename: (req, file, cb) => {
-		const filenameString = new Date().valueOf() + '-' + file.originalname;
+		const filenameString = new Date().valueOf() + "-" + file.originalname;
 		cb(null, filenameString);
 		// cb(null, new Date().toISOString() + '-' + file.originalname);
 	},
-})
+});
 
 const fileFilter = (req, file, cb) => {
-	if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+	if (
+		file.mimetype === "image/png" ||
+		file.mimetype === "image/jpg" ||
+		file.mimetype === "image/jpeg"
+	) {
 		cb(null, true);
 	} else {
 		cb(null, false);
 	}
-}
-
-
+};
 
 app.set("view engine", "ejs");
 app.set("views", "views");
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(multer({storage: fileStorage, fileFilter : fileFilter}).single('image'))
+app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single("image"));
 app.use(express.static(path.join(__dirname, "public")));
-app.use('/images' ,express.static(path.join(__dirname, "images")));
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use(
 	session({
@@ -89,7 +93,6 @@ app.use((req, res, next) => {
 		});
 });
 
-
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
@@ -109,6 +112,6 @@ app.use((error, req, res, next) => {
 mongoose
 	.connect(MONGODB_URI)
 	.then((result) => {
-		app.listen(3000);
+		app.listen(process.env.PORT || 3000);
 	})
 	.catch((err) => console.log(err));
