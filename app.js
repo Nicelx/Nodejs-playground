@@ -8,6 +8,7 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
 const flash = require("connect-flash");
 const multer = require("multer");
+const helmet = require('helmet');
 
 const User = require("./models/user");
 
@@ -53,6 +54,8 @@ const fileFilter = (req, file, cb) => {
 app.set("view engine", "ejs");
 app.set("views", "views");
 
+
+app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single("image"));
 app.use(express.static(path.join(__dirname, "public")));
